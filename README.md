@@ -19,5 +19,5 @@ A set of Python program to assist in Numerical Analysis course.
     * $log_{10}(x)$ is equivalent to `log(x, 10)` or `log10(x)`.
     * $log_{2}(x)$ is equivalent to `log(x, 2)` or `log2(x)`.
 
-    * $arcsin(x)$, $arccos(x)$, $arctan(x)$ are equivalent to `asin(x)`, `acos(x)`, `atan(x)` respectively.
+  * $arcsin(x)$, $arccos(x)$, $arctan(x)$ are equivalent to `asin(x)`, `acos(x)`, `atan(x)` respectively.
   * $\pi$ is equivalent to `pi`. i.e. $\pi/2$ is `pi/2`.
