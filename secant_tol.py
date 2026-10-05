@@ -1,10 +1,10 @@
 from sympy import Symbol, lambdify, sympify
 
 def main():
-    f_expr_str = input("Nhập biểu thức f(x) = 0 (ví dụ: x**3 - x - 1): ")
-    p0_expr_str = input("p0: ")
-    p1_expr_str = input("p1: ")
-    tol_expr_str = input("Nhập độ chính xác (ví dụ: 0.01): ")
+    f_expr_str = input("Enter f(x) = 0 (e.g., x**3 - x - 1): ")
+    p0_expr_str = input("Enter p0: ")
+    p1_expr_str = input("Enter p1: ")
+    tol_expr_str = input("Enter tolerance (e.g., 0.01): ")
     
     p0 = float(sympify(p0_expr_str).evalf())
     p1 = float(sympify(p1_expr_str).evalf())
@@ -15,7 +15,7 @@ def main():
     f_func = lambdify(x, f_expr, 'numpy')
     
 
-    print("\nKết quả lặp:")
+    print("\nIteration Results:")
     results = solve(f_func, p0, p1, tol)
     print_table(results)
         
@@ -29,14 +29,12 @@ def solve(f_func, p0, p1, tol):
         res = calculate(f_func, results[-2], results[-1])
         results.append(res)
         
-        # Kiểm tra độ chính xác
         if abs(res - results[-2]) < tol:
             break
     
     return results
 
 def print_table(data):
-    # Tiêu đề bảng
     print(f"| {'n':^5} | {'p_{n-1}':^12} | {'p_n':^12} | {'p_{n+1}':^12} | {'|p_{n+1} - p_n|':^12} |")
     print("-" * 60)
 

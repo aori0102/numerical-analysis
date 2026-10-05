@@ -1,27 +1,28 @@
 from sympy import Symbol, lambdify, sympify
 
 def main():
-    f_expr_str = input("Nhập biểu thức f(x) = 0 (ví dụ: x**3 - x - 1): ")
-    a = float(sympify(input("Đầu mút trái a: ")).evalf())
-    b = float(sympify(input("Đầu mút phải b: ")).evalf())
-    tol = float(sympify(input("Nhập độ chính xác (ví dụ: 0.01): ")).evalf())
+    f_expr_str = input("Enter f(x) = 0 (ví dụ: x**3 - x - 1): ")
+    a = float(sympify(input("Enter left endpoint a (p0): ")).evalf())
+    b = float(sympify(input("Enter right endpoint b (p1): ")).evalf())
+    n = int(input("Enter number of iterations n (up to p_n): "))
 
     x = Symbol('x')
     f_expr = sympify(f_expr_str)
     f_func = lambdify(x, f_expr, 'numpy')
 
-    print("\nKết quả lặp:")
-    results = solve(f_func, a, b, tol)
+    print("\nIteration Results:")
+    results = solve(f_func, a, b, n)
     print_table(results)
-        
-def solve(f_func, a, b, tol):
-    results = []
-    while True:
+
+def solve(f_func, a, b, n):
+    results = [
+        (a, f_func(a)),
+        (b, f_func(b))
+    ]
+    for _ in range(n - 1):
         c = calculate_c(f_func, a, b)
         res = f_func(c)
         results.append((c, res))
-        if abs(res) < tol:
-            break
         if f_func(a) * res < 0:
             b = c
         else:
@@ -38,7 +39,7 @@ def print_table(data):
 
     for n in range(len(data)):
         c, f_c = data[n]
-        print(f"| {n + 1:^5} | {c:<12.6f} | {f_c:<12.6f} |")
+        print(f"| {n:^5} | {c:<12.6f} | {f_c:<12.6f} |")
 
 if __name__ == "__main__":
     main()

@@ -1,19 +1,18 @@
 from sympy import Symbol, lambdify, sympify
 
 def main():
-    f_expr_str = input("Nhập biểu thức f(x) = 0 (ví dụ: x**3 - x - 1): ")
-    n = int(input("Nhập số lần lặp n (đến p bao nhiêu): "))
-    p0_expr_str = input("p0: ")
-    p1_expr_str = input("p1: ")
+    f_expr_str = input("Enter f(x) = 0 (e.g., x**3 - x - 1): ")
+    n = int(input("Enter number of iterations n (up to p_n): "))
+    p0_expr_str = input("Enter p0: ")
+    p1_expr_str = input("Enter p1: ")
     p0 = float(sympify(p0_expr_str).evalf())
     p1 = float(sympify(p1_expr_str).evalf())
 
     x = Symbol('x')
     f_expr = sympify(f_expr_str)
     f_func = lambdify(x, f_expr, 'numpy')
-    
 
-    print("\nKết quả lặp:")
+    print("\nIteration Results:")
     results = solve(f_func, p0, p1, n)
     print_table(results)
         
@@ -31,7 +30,6 @@ def solve(f_func, p0, p1, n):
     return results
 
 def print_table(data):
-    # Tiêu đề bảng
     print(f"| {'n':^5} | {'p_{n-1}':^12} | {'p_n':^12} | {'p_{n+1}':^12} | {'|p_{n+1} - p_n|':^12} |")
     print("-" * 60)
 
