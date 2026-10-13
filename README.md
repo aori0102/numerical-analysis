@@ -59,3 +59,13 @@ Includes these methods:
   * `--nosolve` : This argument tells the program to stop at decomposition without solving the actual system.
 
   * `--indecimal n` : This argument tells the program to display the result in decimals instead of expression, round to the `n`th digits after the decimal point. If you only pass `--indecimal`, the program will round the results to the 6th digits after the decimal point.
+
+* For Gauss-Jordan method:
+
+  * There is no arguments for `--nosolve`.
+
+  * Use `partialpivot` for switching to partial pivot selection (max value of the first element each row)
+
+  * Use `scaledpivot` for switching to scaled pivot selection (max scalar value of each row)
+
+  * Use `roundtomeaningful n` to make the program round the result to n significant digits after each calculation.
