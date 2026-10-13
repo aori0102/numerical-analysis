@@ -1,5 +1,6 @@
 import argparse
 import re
+from fractions import Fraction
 from decimal import Decimal, ROUND_HALF_EVEN, Context
 
 def parse_arguments():
@@ -23,10 +24,13 @@ def round_significant(val, sig_digits):
     c = Context(prec=sig_digits, rounding=ROUND_HALF_EVEN)
     return c.create_decimal(d)
 
-def compute_op(val, sig_digits):
+def compute_op(val_str, sig_digits, decimal_places):
     if sig_digits is not None:
-        return round_significant(val, sig_digits)
-    return val
+        return round_significant(Decimal(val_str), sig_digits)
+    elif decimal_places is not None:
+        return Decimal(val_str)
+    else:
+        return Fraction(val_str)
 
 def beautify_print(op_str, M, n, row_labels):
     # Tạo từ điển ánh xạ từ nhãn hiện tại sang nhãn hiển thị thứ tự (1, 2, ..., n)
@@ -75,29 +79,31 @@ def main():
         return
 
     print(f"\nEnter elements for matrix A ({n}x{n}):")
-    A = [[Decimal('0') for _ in range(n)] for _ in range(n)]
+    A = [[None for _ in range(n)] for _ in range(n)]
     for i in range(n):
         for j in range(n):
             while True:
                 try:
                     val_str = input(f"  A[{i+1}][{j+1}] = ")
-                    A[i][j] = compute_op(Decimal(val_str), sig_digits)
+                    A[i][j] = compute_op(val_str, sig_digits, decimal_places)
                     break
                 except ValueError:
                     print("  Invalid input. Please enter a valid number.")
 
     print(f"\nEnter elements for vector b ({n} elements):")
-    b = [Decimal('0') for _ in range(n)]
+    b = [None for _ in range(n)]
     for i in range(n):
         while True:
             try:
                 val_str = input(f"  b[{i+1}] = ")
-                b[i] = compute_op(Decimal(val_str), sig_digits)
+                b[i] = compute_op(val_str, sig_digits, decimal_places)
                 break
             except ValueError:
                 print("  Invalid input. Please enter a valid number.")
 
-    M = [[compute_op(A[i][j], sig_digits) for j in range(n)] + [compute_op(b[i], sig_digits)] for i in range(n)]
+    # Khởi tạo ma trận M
+    zero_val = Decimal('0') if (sig_digits is not None or decimal_places is not None) else Fraction(0)
+    M = [[compute_op(str(A[i][j]), sig_digits, decimal_places) for j in range(n)] + [compute_op(str(b[i]), sig_digits, decimal_places)] for i in range(n)]
     
     row_labels = list(range(1, n + 1))
 
@@ -111,7 +117,7 @@ def main():
             if max_val == 0:
                 print(f"Error: Row E_{row_labels[i]} has all coefficients equal to 0; unique solution does not exist.")
                 return
-            s_list.append(compute_op(max_val, sig_digits))
+            s_list.append(compute_op(str(max_val), sig_digits, decimal_places))
 
     for i in range(n):
         print(f"----------------------------------------")
@@ -126,9 +132,9 @@ def main():
                     max_val = val
                     p = k
         elif args.scaledpivot:
-            max_ratio = compute_op(abs(M[i][i]) / s_list[i], sig_digits)
+            max_ratio = compute_op(str(abs(M[i][i]) / s_list[i]), sig_digits, decimal_places)
             for k in range(i + 1, n):
-                ratio = compute_op(abs(M[k][i]) / s_list[k], sig_digits)
+                ratio = compute_op(str(abs(M[k][i]) / s_list[k]), sig_digits, decimal_places)
                 if ratio > max_ratio:
                     max_ratio = ratio
                     p = k
@@ -153,7 +159,8 @@ def main():
         if pivot_element != 1:
             op_norm = f"  Normalize pivot: (1 / {pivot_element}) * E_{row_labels[i]} -> E_{row_labels[i]}"
             for j in range(i, n + 1):
-                M[i][j] = compute_op(M[i][j] / pivot_element, sig_digits)
+                res = M[i][j] / pivot_element
+                M[i][j] = compute_op(str(res), sig_digits, decimal_places)
             beautify_print(op_norm, M, n, row_labels)
 
         for j in range(n):
@@ -162,8 +169,9 @@ def main():
                 if factor != 0:
                     op_elim = f"  Eliminate row: (E_{row_labels[j]} - ({factor}) * E_{row_labels[i]}) -> E_{row_labels[j]}"
                     for k in range(i, n + 1):
-                        prod = compute_op(factor * M[i][k], sig_digits)
-                        M[j][k] = compute_op(M[j][k] - prod, sig_digits)
+                        prod = compute_op(str(factor * M[i][k]), sig_digits, decimal_places)
+                        diff = M[j][k] - prod
+                        M[j][k] = compute_op(str(diff), sig_digits, decimal_places)
                     beautify_print(op_elim, M, n, row_labels)
 
     print("----------------------------------------")
@@ -178,7 +186,7 @@ def main():
 
     print("System Solution:")
     for i in range(n):
-        val = solutions[i] if solutions[i] is not None else Decimal('0')
+        val = solutions[i] if solutions[i] is not None else zero_val
         formatted_val = format_final_number(val, decimal_places, sig_digits)
         print(f"  x_{i+1} = {formatted_val}")
 
