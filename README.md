@@ -1,7 +1,25 @@
 # numerical-analysis
 A set of Python program to assist in Numerical Analysis course.
 
-## How to use
+## Calculation Methods
+
+### Packages
+
+Includes these methods:
+
+* [Newton with n iterations](./newton_n.py)
+
+* [Newton with tolerance](./newton_tol.py)
+
+* [False position with n iterations](./false_position_n.py)
+
+* [False position with tolerance](./false_position_tol.py)
+
+* [Secant method with n iterations](./secant_n.py)
+
+* [Secant method with tolerance](./secant_tol.py)
+
+### How to use
 
 * Run `python` with the desired method. `_n` is calculating with n steps, whilst `_tol` is calculating with tolerance.
 
@@ -21,3 +39,23 @@ A set of Python program to assist in Numerical Analysis course.
 
   * $arcsin(x)$, $arccos(x)$, $arctan(x)$ are equivalent to `asin(x)`, `acos(x)`, `atan(x)` respectively.
   * $\pi$ is equivalent to `pi`. i.e. $\pi/2$ is `pi/2`.
+
+## Sovling system of equations
+
+### Packages
+
+* [Doolittle LU decomposition method](./doolittle_lu.py)
+
+* [Cholesky decomposition method](./cholesky.py)
+
+### How to use
+
+* Run the desired program. It will ask for matrix inputs.
+
+* By default, the program's result will be displayed in simplified expressions (i.e. $1/3$ instead of $0.3333333...$)
+
+* There are some arguments to pass into the program to alter the result to your need:
+
+  * `--nosolve` : This argument tells the program to stop at decomposition without solving the actual system.
+
+  * `--indecimal n` : This argument tells the program to display the result in decimals instead of expression, round to the `n`th digits after the decimal point. If you only pass `--indecimal`, the program will round the results to the 6th digits after the decimal point.

@@ -5,17 +5,17 @@ def parse_arguments():
     """
     Parses command-line arguments:
     --nosolve: Skips solving step and vector b input.
-    --inrealnum [n]: Formats output as decimal numbers rounded to n decimal places (default n=6).
+    --indecimal [n]: Formats output as decimal numbers rounded to n decimal places (default n=6).
     """
     nosolve = "--nosolve" in sys.argv
     
     inrealnum = False
     decimals = 6  # default
     
-    if "--inrealnum" in sys.argv:
+    if "--indecimal" in sys.argv:
         inrealnum = True
-        idx = sys.argv.index("--inrealnum")
-        # Check if a number follows --inrealnum
+        idx = sys.argv.index("--indecimal")
+        # Check if a number follows --indecimal
         if idx + 1 < len(sys.argv):
             try:
                 decimals = int(sys.argv[idx + 1])
@@ -49,7 +49,7 @@ def cholesky_decomposition_program():
     if nosolve:
         print("[Mode: --nosolve enabled -> Decomposition only]")
     if inrealnum:
-        print(f"[Mode: --inrealnum enabled -> Decimal output rounded to {decimals} places]")
+        print(f"[Mode: --indecimal enabled -> Decimal output rounded to {decimals} places]")
 
     n = int(input("\nEnter matrix size n (e.g., 3): "))
     
